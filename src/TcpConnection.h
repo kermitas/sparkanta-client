@@ -6,24 +6,21 @@
 class TcpConnection: public TCPClient
 {
 	public:
-		TcpConnection(String _ip, uint16_t _port, byte _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis, uint16_t _incomingDataInactivityTimeoutInMillis);
+		TcpConnection(String _ip, uint16_t _port, uint8_t _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis);
 
 		virtual bool connect();
 		virtual uint8_t connected();
-		virtual void inactivityCheck();
-		virtual void stop();
+		virtual void process();
 		virtual ~TcpConnection();
 
 	protected:
-	    byte ip[4];
+	    uint8_t ip[4];
 	    uint16_t port;
-	    byte maxConnectionRetries;
-	    byte connectionRetry;
+	    uint8_t maxConnectionRetries;
+	    uint8_t connectionRetry;
 	    uint16_t delayBetweenConnestionReattemptsInMillis;
-	    uint16_t incomingDataInactivityTimeoutInMillis;
-	    long lastIncomingDataTime;
 		
-		virtual void ipArrayFromString(byte ipAsByteArray[], String ip);
+		virtual void ipArrayFromString(uint8_t ipAsByteArray[], String ip);
 		virtual bool connectNow();
 };
 

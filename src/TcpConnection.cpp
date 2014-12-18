@@ -1,16 +1,14 @@
 #include "TcpConnection.h"
 
-TcpConnection::TcpConnection(String _ip, uint16_t _port, byte _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis, uint16_t _incomingDataInactivityTimeoutInMillis): TCPClient() {
+TcpConnection::TcpConnection(String _ip, uint16_t _port, uint8_t _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis): TCPClient() {
     ipArrayFromString(ip, _ip);
     port = _port;
     maxConnectionRetries = _maxConnectionRetries;
     connectionRetry = 0;
     delayBetweenConnestionReattemptsInMillis = _delayBetweenConnestionReattemptsInMillis;
-    lastIncomingDataTime = millis();
-    incomingDataInactivityTimeoutInMillis = _incomingDataInactivityTimeoutInMillis;
 }
 
-void TcpConnection::ipArrayFromString(byte ipAsByteArray[], String ip) {
+void TcpConnection::ipArrayFromString(uint8_t ipAsByteArray[], String ip) {
   int dot1 = ip.indexOf('.');
   ipAsByteArray[0] = ip.substring(0, dot1).toInt();
   int dot2 = ip.indexOf('.', dot1 + 1);
@@ -21,22 +19,10 @@ void TcpConnection::ipArrayFromString(byte ipAsByteArray[], String ip) {
 }
 
 uint8_t TcpConnection::connected() {
-    inactivityCheck();
     return TCPClient::connected();
 }
 
-void TcpConnection::stop() {
-    while(available() > 0) {
-        read();
-        flush();
-    }
-    
-    TCPClient::stop();
-}
-
-void TcpConnection::inactivityCheck() {
-    if(incomingDataInactivityTimeoutInMillis > 0 && millis() - lastIncomingDataTime > incomingDataInactivityTimeoutInMillis) stop();
-}
+void TcpConnection::process() { }
 
 bool TcpConnection::connect() {
     if(connected()) {
@@ -50,12 +36,11 @@ bool TcpConnection::connect() {
 bool TcpConnection::connectNow() {
     if (TCPClient::connect(ip, port)) {
         connectionRetry = 0;
-        lastIncomingDataTime = millis();
         return true;
     } else {
         connectionRetry++;
         
-        if(maxConnectionRetries > 0 && connectionRetry >= maxConnectionRetries) System.reset();
+        if(maxConnectionRetries > 0 && (connectionRetry > maxConnectionRetries)) System.reset();
         
         if(delayBetweenConnestionReattemptsInMillis > 0) delay(delayBetweenConnestionReattemptsInMillis);
         
