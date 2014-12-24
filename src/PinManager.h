@@ -11,45 +11,50 @@
 class PinsManager
 {
 	public:
-		PinsManager();
+		PinsManager(IndexedByteArray* _outgoingByteBuffer, Serializers* _serializers, uint8_t _doNotPutIntoBufferMoreThan);
         
-        virtual void configurePins(PinsConfig* pinsConfig);
-        virtual void process(PinsConfig* pinsConfig, IndexedByteArray* byteArray);
-        
-		virtual ~PinsManager();
+        virtual void configurePins(PinsConfig* newPinsConfig);
+        virtual void process();
+        virtual void setPinValue(SetDigitalPinValue* setDigitalPinValue);
+        virtual void setPinValue(SetAnalogPinValue* setAnalogPinValue);
 		
 	protected:
-	    DigitalPinRuntimeConfig digitalPins[8] = { DigitalPinRuntimeConfig(0),
-	                                               DigitalPinRuntimeConfig(1),
-	                                               DigitalPinRuntimeConfig(2),
-	                                               DigitalPinRuntimeConfig(3),
-	                                               DigitalPinRuntimeConfig(4),
-	                                               DigitalPinRuntimeConfig(5),
-	                                               DigitalPinRuntimeConfig(6),
-	                                               DigitalPinRuntimeConfig(7)
-	                                           };
+
+	    DigitalPinRuntimeConfig digitalPins[8] = { DigitalPinRuntimeConfig(0, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                               DigitalPinRuntimeConfig(1, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(2, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(3, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(4, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(5, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(6, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+        	                                       DigitalPinRuntimeConfig(7, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType)
+	                                             };
 	                                    
-	    AnalogPinRuntimeConfig analogPins[8] = { AnalogPinRuntimeConfig(0),
-	                                             AnalogPinRuntimeConfig(1),
-	                                             AnalogPinRuntimeConfig(2),
-	                                             AnalogPinRuntimeConfig(3),
-	                                             AnalogPinRuntimeConfig(4),
-	                                             AnalogPinRuntimeConfig(5),
-	                                             AnalogPinRuntimeConfig(6),
-	                                             AnalogPinRuntimeConfig(7)
-	                                           };	
-	                
+	    AnalogPinRuntimeConfig analogPins[8] = { AnalogPinRuntimeConfig(0, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(1, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(2, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(3, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(4, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(5, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(6, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+        	                                     AnalogPinRuntimeConfig(7, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType)
+	                                           };	                                    
+		                
 	    DigitalPinValue digitalPinValue;
 	    AnalogPinValue analogPinValue;
 	    
-	    virtual void configureDigitalPin(DigitalPinConfig* digitalPinConfig, DigitalPinRuntimeConfig* digitalPinRuntimeConfig);                                       
-        virtual void configureAnalogPin(AnalogPinConfig* analogPinConfig, AnalogPinRuntimeConfig* analogPinRuntimeConfig);
+	    IndexedByteArray* outgoingByteBuffer;
+	    Serializers* serializers;
+	    uint8_t doNotPutIntoBufferMoreThan;
+	    
+	    virtual void configureDigitalPin(DigitalPinRuntimeConfig* digitalPinRuntimeConfig);                                       
+        virtual void configureAnalogPin(AnalogPinRuntimeConfig* analogPinRuntimeConfig);
         
-	    virtual void processDigitalPin(DigitalPinConfig* digitalPinConfig, DigitalPinRuntimeConfig* digitalPinRuntimeConfig, IndexedByteArray* byteArray);                                       
-        virtual void processAnalogPin(AnalogPinConfig* analogPinConfig, AnalogPinRuntimeConfig* analogPinRuntimeConfig, IndexedByteArray* byteArray);
+	    virtual void processDigitalPin(DigitalPinRuntimeConfig* digitalPinRuntimeConfig);                                       
+        virtual void processAnalogPin(AnalogPinRuntimeConfig* analogPinRuntimeConfig);
         
-        virtual uint16_t getSparkDigitalPinNumber(uint8_t digiralPinNumber);
-        virtual uint16_t getSparkAnalogPinNumber(uint8_t analogPinNumber);
+        virtual uint16_t getSparkDigitalPinNumber(DigitalPinRuntimeConfig* digitalPinRuntimeConfig);
+        virtual uint16_t getSparkAnalogPinNumber(AnalogPinRuntimeConfig* analogPinRuntimeConfig);
 };
 
 #endif /* PINSMANAGER_H */

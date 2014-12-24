@@ -1,11 +1,9 @@
 #include "TcpConnection.h"
 
-TcpConnection::TcpConnection(String _ip, uint16_t _port, uint8_t _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis): TCPClient() {
+TcpConnection::TcpConnection(String _ip, uint16_t _port, bool _logToSerail): TCPClient() {    
     ipArrayFromString(ip, _ip);
     port = _port;
-    maxConnectionRetries = _maxConnectionRetries;
-    connectionRetry = 0;
-    delayBetweenConnestionReattemptsInMillis = _delayBetweenConnestionReattemptsInMillis;
+    logToSerail = _logToSerail;        
 }
 
 void TcpConnection::ipArrayFromString(uint8_t ipAsByteArray[], String ip) {
@@ -18,34 +16,30 @@ void TcpConnection::ipArrayFromString(uint8_t ipAsByteArray[], String ip) {
   ipAsByteArray[3] = ip.substring(dot1 + 1).toInt();
 }
 
-uint8_t TcpConnection::connected() {
-    return TCPClient::connected();
-}
-
-void TcpConnection::process() { }
-
 bool TcpConnection::connect() {
-    if(connected()) {
-        return true;
-    } else {
-        return connectNow();
+    return TCPClient::connect(ip, port);
+}
+
+void TcpConnection::stop() {
+    if(TCPClient::connected()) {
+        
+        if(logToSerail && available() > 0) {
+            Serial.print("TcpConnection.stop: before closing connection read out all ");
+            Serial.print(available());
+            Serial.print(" available bytes and perform flush...");
+        }
+    
+        uint16_t i = 0;
+        int readByte = 0;
+        while(available() > 0 && readByte >= 0 && i < 1024 * 8) {
+            readByte = read();
+            i++;
+        }
+        
+        flush();
+        
+        if(logToSerail) Serial.println("closing connection right now");
     }
+    
+    TCPClient::stop();
 }
-
-
-bool TcpConnection::connectNow() {
-    if (TCPClient::connect(ip, port)) {
-        connectionRetry = 0;
-        return true;
-    } else {
-        connectionRetry++;
-        
-        if(maxConnectionRetries > 0 && (connectionRetry > maxConnectionRetries)) System.reset();
-        
-        if(delayBetweenConnestionReattemptsInMillis > 0) delay(delayBetweenConnestionReattemptsInMillis);
-        
-        return false;
-    } 
-}
-
-TcpConnection::~TcpConnection() { }

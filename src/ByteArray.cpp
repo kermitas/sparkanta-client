@@ -7,8 +7,6 @@ ByteArray::ByteArray(uint8_t* _bytes, uint16_t _length) {
     length = _length;
 }
 
-ByteArray::~ByteArray() { }
-
 // =============================================================
 
 IndexedByteArray::IndexedByteArray(uint8_t* _bytes, uint16_t _length, uint16_t _index): ByteArray(_bytes, _length) {
@@ -21,6 +19,10 @@ bool IndexedByteArray::isEmpty() {
 
 bool IndexedByteArray::containsData() {
     return index > 0;
+}
+
+uint8_t IndexedByteArray::peekByte() {
+    return bytes[index];
 }
 
 void IndexedByteArray::putByte(uint8_t b) {
@@ -84,7 +86,5 @@ uint16_t IndexedByteArray::getWord(uint16_t index) {
 void IndexedByteArray::drop(uint16_t count) {
     index += count;
 }
-
-IndexedByteArray::~IndexedByteArray() { }
 
 // =============================================================

@@ -4,24 +4,35 @@
 #include "application.h"
 #include "TcpConnection.h"
 #include "ByteArray.h"
-#include "Message.h"
 
 class SparkantaConnection: public TcpConnection
 {
 	public:
-		SparkantaConnection(String _ip, uint16_t _port, uint8_t _maxConnectionRetries, uint16_t _delayBetweenConnestionReattemptsInMillis, uint32_t _incomingMessageInactivityTimeoutInMillis, String _identyficationString, uint8_t _softwareVersion, uint8_t _hardwareVersion);
+	    SparkantaConnection(bool _logToSerail, 
+		                    String _ip, 
+		                    uint16_t _port, 
+		                    String _deviceUniqueName,
+		                    uint32_t _incomingMessageInactivityTimeoutInMillis, 
+		                    String _identyficationString, 
+		                    uint8_t _softwareVersion, 
+		                    uint8_t _hardwareVersion,
+		                    IndexedByteArray* _incomingByteBuffer,
+		                    IndexedByteArray* _outgoingByteBuffer);
 
-        virtual bool connect(IndexedByteArray* byteArray);
-        virtual bool readMessage(IndexedByteArray* byteArray);
-        virtual void process();
-		virtual ~SparkantaConnection();
+        virtual bool connect();
+        virtual bool readMessage();
+        virtual void sendMessages();
+        virtual bool isIncomingTrafficInactivityExceeded();
 
 	protected:
+	    String deviceUniqueName;
+	    uint32_t incomingMessageInactivityTimeoutInMillis;
 		String identyficationString;
 	    uint8_t softwareVersion;
 	    uint8_t hardwareVersion;
-	    uint32_t incomingMessageInactivityTimeoutInMillis;
-	    uint32_t lastIncomingMessageTimeInMillis = millis();
+	    uint32_t lastIncomingMessageTimeInMillis;
+        IndexedByteArray* outgoingByteBuffer;	
+        IndexedByteArray* incomingByteBuffer;
 };
 
 #endif /* SPARKANTA_CONNECTION_H */

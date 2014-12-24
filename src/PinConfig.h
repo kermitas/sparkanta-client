@@ -1,12 +1,15 @@
 // =============================================================
 
-#define outputPinWorkMode 0
-#define inputPinWorkMode 1
-#define inputPullUpPinWorkMode 2
-#define inputPullDownPinWorkMode 3
+#define OutputPinWorkMode 0
+#define InputPinWorkMode 1
+#define InputPullUpPinWorkMode 2
+#define InputPullDownPinWorkMode 3
 
-#define eachAnalogProbeValueReadNotificationType 0
-#define eachDigitalProbeValueReadNotificationType 0
+#define EachAnalogProbeValueReadNotificationType 0
+#define EachAnalogProbeChangeReadNotificationType 1
+
+#define EachDigitalProbeValueReadNotificationType 0
+#define EachDigitalProbeChangeReadNotificationType 1
 
 // =============================================================
 
@@ -25,8 +28,6 @@ class PinConfig
 	    uint8_t readNotificationTypeForInputMode;
 	    
 		PinConfig(uint8_t _pinNumber, uint8_t _pinWorkMode, uint8_t _initialPinValueForOutputMode, uint16_t _probeTimeInMillisForInputMode, uint8_t _readNotificationTypeForInputMode);
-        
-		virtual ~PinConfig();
 };
 
 #endif /* PINCONFIG_H */
@@ -40,8 +41,6 @@ class AnalogPinConfig: public PinConfig
 {
 	public:
 		AnalogPinConfig(uint8_t _pinNumber, uint8_t _pinWorkMode, uint8_t _initialPinValueForOutputMode, uint16_t _probeTimeInMillisForInputMode, uint8_t _readNotificationTypeForInputMode);
-        
-		virtual ~AnalogPinConfig();
 };
 
 #endif /* ANALOGPINCONFIG_H */
@@ -55,8 +54,6 @@ class DigitalPinConfig: public PinConfig
 {
 	public:
 		DigitalPinConfig(uint8_t _pinNumber, uint8_t _pinWorkMode, uint8_t _initialPinValueForOutputMode, uint16_t _probeTimeInMillisForInputMode, uint8_t _readNotificationTypeForInputMode);
-        
-		virtual ~DigitalPinConfig();
 };
 
 #endif /* DIGITALPINCONFIG_H */
@@ -69,62 +66,43 @@ class DigitalPinConfig: public PinConfig
 class PinsConfig
 {
 	public:
-	    DigitalPinConfig digitalPins[8] = { DigitalPinConfig(0, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(1, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(2, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(3, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(4, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(5, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(6, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType),
-	                                        DigitalPinConfig(7, outputPinWorkMode, 0, 500, eachDigitalProbeValueReadNotificationType)
+	    DigitalPinConfig digitalPins[8] = { DigitalPinConfig(0, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(1, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(2, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(3, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(4, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(5, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(6, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType),
+	                                        DigitalPinConfig(7, OutputPinWorkMode, 0, 500, EachDigitalProbeValueReadNotificationType)
 	                                    };
 	                                    
-	    AnalogPinConfig analogPins[8] = { AnalogPinConfig(0, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(1, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(2, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(3, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(4, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(5, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(6, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType),
-	                                      AnalogPinConfig(7, outputPinWorkMode, 0, 500, eachAnalogProbeValueReadNotificationType)
+	    AnalogPinConfig analogPins[8] = { AnalogPinConfig(0, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(1, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(2, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(3, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(4, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(5, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(6, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType),
+	                                      AnalogPinConfig(7, OutputPinWorkMode, 0, 500, EachAnalogProbeValueReadNotificationType)
 	                                    };	                                    
 	
 		PinsConfig();
-        
-		virtual ~PinsConfig();
 };
 
 #endif /* PINSCONFIG_H */
 
 // =============================================================
 
-#ifndef PINRUNTIMECONFIG_H
-#define PINRUNTIMECONFIG_H
-
-class PinRuntimeConfig
-{
-	public:
-	    uint8_t pinNumber;
-	    uint32_t lastProbeTime = millis();
-	
-		PinRuntimeConfig(uint8_t _pinNumber);
-        
-		virtual ~PinRuntimeConfig();
-};
-
-#endif /* PINRUNTIMECONFIG_H */
-
-// =============================================================
-
 #ifndef ANALOGPINRUNTIMECONFIG_H
 #define ANALOGPINRUNTIMECONFIG_H
 
-class AnalogPinRuntimeConfig: public PinRuntimeConfig
+class AnalogPinRuntimeConfig: public AnalogPinConfig
 {
 	public:
-		AnalogPinRuntimeConfig(uint8_t _pinNumber);
-        
-		virtual ~AnalogPinRuntimeConfig();
+	    uint32_t lastProbeTime;
+	    int32_t previousPinValue;
+	
+	    AnalogPinRuntimeConfig(uint8_t _pinNumber, uint8_t _pinWorkMode, uint8_t _initialPinValueForOutputMode, uint16_t _probeTimeInMillisForInputMode, uint8_t _readNotificationTypeForInputMode);
 };
 
 #endif /* ANALOGPINRUNTIMECONFIG_H */
@@ -134,12 +112,13 @@ class AnalogPinRuntimeConfig: public PinRuntimeConfig
 #ifndef DIGITALPINRUNTIMECONFIG_H
 #define DIGITALPINRUNTIMECONFIG_H
 
-class DigitalPinRuntimeConfig: public PinRuntimeConfig
+class DigitalPinRuntimeConfig: public DigitalPinConfig
 {
 	public:
-		DigitalPinRuntimeConfig(uint8_t _pinNumber);
-        
-		virtual ~DigitalPinRuntimeConfig();
+	    uint32_t lastProbeTime;
+	    int32_t previousPinValue;
+	    
+	    DigitalPinRuntimeConfig(uint8_t _pinNumber, uint8_t _pinWorkMode, uint8_t _initialPinValueForOutputMode, uint16_t _probeTimeInMillisForInputMode, uint8_t _readNotificationTypeForInputMode);
 };
 
 #endif /* DIGITALPINRUNTIMECONFIG_H */

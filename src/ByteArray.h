@@ -12,8 +12,6 @@ class ByteArray
 	    uint16_t length;
 	
 		ByteArray(uint8_t* _bytes, uint16_t _length);
-        
-		virtual ~ByteArray();
 };
 
 #endif /* BYTE_ARRAY_H */
@@ -33,6 +31,8 @@ class IndexedByteArray: public ByteArray
         virtual bool isEmpty();
         virtual bool containsData();
         
+        virtual uint8_t peekByte();
+        
         virtual void putByte(uint8_t b);
         virtual void putByte(uint16_t index, uint8_t b);
         
@@ -51,8 +51,6 @@ class IndexedByteArray: public ByteArray
         virtual uint16_t getWord(uint16_t index);
         
         virtual void drop(uint16_t count);
-        
-		virtual ~IndexedByteArray();
 };
 
 #endif /* INDEXED_YTE_ARRAY_H */
